@@ -8,6 +8,210 @@
 
 import Cocoa
 
-class BashTaskManager: NSObject {
+struct BashTaskSettings {
+    var name: String!
+    var launchPath: String!
+    var params: [String]?
+    var useBashC: Bool!
+    fileprivate var UUID: String!
+    
+    init(name: String, launchPath: String, params: [String]?, useBashC: Bool) {
+        self.name = name
+        self.launchPath = launchPath
+        self.params = params
+        self.useBashC = useBashC
+    }
+}
 
+class BashTaskManager: NSObject, NSOpenSavePanelDelegate {
+
+    // delegate
+    let appDelegate = NSApplication.shared().delegate as! AppDelegate
+    
+    // menu bar
+    var statusItem: NSStatusItem!
+    
+    // process
+    var process: Process?
+    var stdOut: Pipe?
+    var stdIn: Pipe?
+    var stdErr: Pipe?
+    
+    // primary menu item
+    var primaryMenuItem: NSMenuItem!
+    
+    // task specific menu
+    let menu = NSMenu()
+    
+    // task specific menu items
+    var launchProcessMenuItem: NSMenuItem!
+    var terminateProcessMenuItem: NSMenuItem!
+    
+    // bash task settings
+    var settings: BashTaskSettings!
+    
+    // serial queue
+    var processDispatcher: DispatchQueue!
+    
+    override init() {
+        super.init()
+        
+        statusItem = self.appDelegate.statusItem
+    }
+    
+    convenience init(_ settings: BashTaskSettings) {
+        self.init()
+        
+        self.settings = settings
+        self.settings.UUID = UUID.init().uuidString
+        
+        self.setup()
+        
+        self.processDispatcher = DispatchQueue(label: self.settings.UUID)
+    }
+    
+    private func setup() {
+        self.menu.autoenablesItems = false
+        
+        self.primaryMenuItem = NSMenuItem(title: settings.name, action: nil, keyEquivalent: "")
+        self.primaryMenuItem.submenu = menu
+        self.primaryMenuItem.target = self
+        self.primaryMenuItem.image = #imageLiteral(resourceName: "red-circle")
+        
+        self.launchProcessMenuItem = NSMenuItem(title: "Launch \(settings.name!)", action: #selector(BashTaskManager.launchProcess), keyEquivalent: "")
+        self.terminateProcessMenuItem = NSMenuItem(title: "Terminate \(settings.name!)", action: #selector(BashTaskManager.terminateProcess), keyEquivalent: "")
+        
+        self.launchProcessMenuItem.target = self
+        self.terminateProcessMenuItem.target = self
+        
+        self.launchProcessMenuItem.isEnabled = true
+        self.terminateProcessMenuItem.isEnabled = false
+        
+        self.menu.addItem(self.launchProcessMenuItem)
+        self.menu.addItem(self.terminateProcessMenuItem)
+        
+        self.statusItem.menu?.addItem(self.primaryMenuItem)
+    }
+    
+    // MARK: - Launch/Terminate
+    
+    @objc private func launchProcess() {
+        self.processDispatcher.async {
+            var params: [String] = []
+            if self.settings.params != nil { params = self.settings.params! }
+            
+            let semaphore = DispatchSemaphore(value: 0)
+            
+            var canceled = false
+            
+            for i in 0 ..< params.count {
+                if params[i] == "{dir}" {
+                    self.selectFolder({ (dir) in
+                        if dir != nil { params[i] = dir! }
+                        else { canceled = true }
+                        semaphore.signal()
+                    })
+                    semaphore.wait()
+                } else if params[i] == "{input}" {
+                    self.textInput({ (input) in
+                        if input != nil { params[i] = input! }
+                        else { canceled = true }
+                        semaphore.signal()
+                    })
+                    semaphore.wait()
+                }
+                
+                if canceled { return }
+            }
+            
+            
+            var launchPath: String!
+            
+            if self.settings.useBashC {
+                launchPath = "/bin/bash"
+                let concatString = "\(self.settings.launchPath!) \(params.joined(separator: " "))"
+                params = ["-c", concatString]
+            } else {
+                launchPath = self.settings.launchPath
+            }
+            
+            self.process = Process()
+            self.process!.launchPath = launchPath!
+            self.process!.arguments = params
+            
+            self.process!.launch()
+            
+            self.launchProcessMenuItem.isEnabled = false
+            self.terminateProcessMenuItem.isEnabled = true
+            self.primaryMenuItem.image = #imageLiteral(resourceName: "green-circle")
+            
+            self.process?.waitUntilExit()
+            self.cleanup()
+        }
+    }
+    
+    @objc private func terminateProcess() {
+        if self.process != nil {
+            self.process?.terminate()
+            self.process?.waitUntilExit()
+            self.cleanup()
+        }
+    }
+    
+    private func cleanup() {
+        print("terminated!")
+        self.process = nil
+        self.launchProcessMenuItem.isEnabled = true
+        self.terminateProcessMenuItem.isEnabled = false
+        self.primaryMenuItem.image = #imageLiteral(resourceName: "red-circle")
+    }
+    
+    // MARK: - Folder Selection
+    
+    private func selectFolder(_ completion:@escaping (String?) -> Void) {
+        DispatchQueue.main.async {
+            NSApp.activate(ignoringOtherApps: true)
+            let openPanel = NSOpenPanel();
+            openPanel.title = "Select a directory"
+            openPanel.showsResizeIndicator = true
+            openPanel.canChooseDirectories = true
+            openPanel.canChooseFiles = false
+            openPanel.allowsMultipleSelection = false
+            openPanel.canCreateDirectories = true
+            openPanel.delegate = self
+            
+            openPanel.begin { (result) in
+                if (result == NSFileHandlingPanelOKButton) {
+                    if let path = openPanel.url?.path {
+                        completion(path)
+                    }
+                } else {
+                    completion(nil)
+                }
+            }
+        }
+    }
+    
+    // MARK: - Text Input
+    
+    private func textInput(_ completion:@escaping (String?) -> Void) {
+        DispatchQueue.main.async {
+            NSApp.activate(ignoringOtherApps: true)
+            let alert = NSAlert()
+            alert.messageText = "Input"
+            alert.addButton(withTitle: "OK")
+            alert.addButton(withTitle: "Cancel")
+            
+            let input = NSTextField(frame: NSRect(x: 0, y: 0, width: 200, height: 24))
+            input.stringValue = ""
+            alert.accessoryView = input
+            
+            alert.window.initialFirstResponder = input
+            let res = alert.runModal()
+            
+            if res == NSAlertFirstButtonReturn { completion(input.stringValue) }
+            else { completion(nil) }
+        }
+    }
+    
 }

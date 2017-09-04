@@ -13,6 +13,7 @@
 		CA187A4F1F24633F000B9C13 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA187A4D1F24633F000B9C13 /* Main.storyboard */; };
 		CA187A5A1F24633F000B9C13 /* MenuManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA187A591F24633F000B9C13 /* MenuManagerTests.swift */; };
 		CA187A651F24633F000B9C13 /* MenuManagerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA187A641F24633F000B9C13 /* MenuManagerUITests.swift */; };
+		CA187A731F251351000B9C13 /* BashTaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA187A721F251351000B9C13 /* BashTaskManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +46,7 @@
 		CA187A601F24633F000B9C13 /* MenuManagerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MenuManagerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA187A641F24633F000B9C13 /* MenuManagerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuManagerUITests.swift; sourceTree = "<group>"; };
 		CA187A661F24633F000B9C13 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CA187A721F251351000B9C13 /* BashTaskManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BashTaskManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				CA187A471F24633F000B9C13 /* AppDelegate.swift */,
+				CA187A721F251351000B9C13 /* BashTaskManager.swift */,
 				CA187A491F24633F000B9C13 /* ViewController.swift */,
 				CA187A4B1F24633F000B9C13 /* Assets.xcassets */,
 				CA187A4D1F24633F000B9C13 /* Main.storyboard */,
@@ -258,6 +261,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA187A731F251351000B9C13 /* BashTaskManager.swift in Sources */,
 				CA187A4A1F24633F000B9C13 /* ViewController.swift in Sources */,
 				CA187A481F24633F000B9C13 /* AppDelegate.swift in Sources */,
 			);
