@@ -39,6 +39,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSOpenSavePanelDelegate {
     // mark: - Setup Jupyter
     
     func setupMenu() {
+        // TODO: Make this modular
         let settings = BashTaskSettings(name: "Jupyter Notebook", launchPath: "/usr/local/bin/jupyter", params: ["notebook", "{dir}"], useBashC: false)
         bashMenuItems.append(BashTaskManager(settings))
         

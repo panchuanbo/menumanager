@@ -8,21 +8,6 @@
 
 import Cocoa
 
-struct BashTaskSettings {
-    var name: String!
-    var launchPath: String!
-    var params: [String]?
-    var useBashC: Bool!
-    fileprivate var UUID: String!
-    
-    init(name: String, launchPath: String, params: [String]?, useBashC: Bool) {
-        self.name = name
-        self.launchPath = launchPath
-        self.params = params
-        self.useBashC = useBashC
-    }
-}
-
 class BashTaskManager: NSObject, NSOpenSavePanelDelegate {
 
     // delegate
@@ -106,14 +91,14 @@ class BashTaskManager: NSObject, NSOpenSavePanelDelegate {
             
             for i in 0 ..< params.count {
                 if params[i] == "{dir}" {
-                    self.selectFolder({ (dir) in
+                    SharedUtilities.selectFolder({ (dir) in
                         if dir != nil { params[i] = dir! }
                         else { canceled = true }
                         semaphore.signal()
                     })
                     semaphore.wait()
                 } else if params[i] == "{input}" {
-                    self.textInput({ (input) in
+                    SharedUtilities.textInput({ (input) in
                         if input != nil { params[i] = input! }
                         else { canceled = true }
                         semaphore.signal()
@@ -165,53 +150,4 @@ class BashTaskManager: NSObject, NSOpenSavePanelDelegate {
         self.terminateProcessMenuItem.isEnabled = false
         self.primaryMenuItem.image = #imageLiteral(resourceName: "red-circle")
     }
-    
-    // MARK: - Folder Selection
-    
-    private func selectFolder(_ completion:@escaping (String?) -> Void) {
-        DispatchQueue.main.async {
-            NSApp.activate(ignoringOtherApps: true)
-            let openPanel = NSOpenPanel();
-            openPanel.title = "Select a directory"
-            openPanel.showsResizeIndicator = true
-            openPanel.canChooseDirectories = true
-            openPanel.canChooseFiles = false
-            openPanel.allowsMultipleSelection = false
-            openPanel.canCreateDirectories = true
-            openPanel.delegate = self
-            
-            openPanel.begin { (result) in
-                if (result == NSFileHandlingPanelOKButton) {
-                    if let path = openPanel.url?.path {
-                        completion(path)
-                    }
-                } else {
-                    completion(nil)
-                }
-            }
-        }
-    }
-    
-    // MARK: - Text Input
-    
-    private func textInput(_ completion:@escaping (String?) -> Void) {
-        DispatchQueue.main.async {
-            NSApp.activate(ignoringOtherApps: true)
-            let alert = NSAlert()
-            alert.messageText = "Input"
-            alert.addButton(withTitle: "OK")
-            alert.addButton(withTitle: "Cancel")
-            
-            let input = NSTextField(frame: NSRect(x: 0, y: 0, width: 200, height: 24))
-            input.stringValue = ""
-            alert.accessoryView = input
-            
-            alert.window.initialFirstResponder = input
-            let res = alert.runModal()
-            
-            if res == NSAlertFirstButtonReturn { completion(input.stringValue) }
-            else { completion(nil) }
-        }
-    }
-    
 }
