@@ -11,7 +11,7 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, NSOpenSavePanelDelegate {
 
-    let statusItem = NSStatusBar.system().statusItem(withLength: -2)
+    let statusItem = NSStatusBar.system.statusItem(withLength: -2)
     
     let menu = NSMenu()
     
@@ -57,17 +57,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSOpenSavePanelDelegate {
 
     // mark: - Status Bar
     
-    func openSettings() {
-        let storyboard = NSStoryboard(name: "Main", bundle: nil)
-        let settingsWindowController = storyboard.instantiateController(withIdentifier: "SettingsMenu") as! NSWindowController
+    @objc func openSettings() {
+        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil)
+        let settingsWindowController = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "SettingsMenu")) as! NSWindowController
         
         if let settingsWindow = settingsWindowController.window {
-            NSApplication.shared().runModal(for: settingsWindow)
+            NSApplication.shared.runModal(for: settingsWindow)
         }
     }
     
-    func terminate() {
-        NSApplication.shared().terminate(self)
+    @objc func terminate() {
+        NSApplication.shared.terminate(self)
     }
 }
 

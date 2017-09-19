@@ -11,7 +11,7 @@ import Cocoa
 class BashTaskManager: NSObject, NSOpenSavePanelDelegate {
 
     // delegate
-    let appDelegate = NSApplication.shared().delegate as! AppDelegate
+    let appDelegate = NSApplication.shared.delegate as! AppDelegate
     
     // menu bar
     var statusItem: NSStatusItem!
