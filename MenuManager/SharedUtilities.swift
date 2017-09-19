@@ -24,7 +24,7 @@ class SharedUtilities {
             openPanel.canCreateDirectories = true
             
             openPanel.begin { (result) in
-                if (result == NSFileHandlingPanelOKButton) {
+                if (result.rawValue == NSFileHandlingPanelOKButton) {
                     if let path = openPanel.url?.path {
                         completion(path)
                     }
@@ -52,7 +52,7 @@ class SharedUtilities {
             alert.window.initialFirstResponder = input
             let res = alert.runModal()
             
-            if res == NSAlertFirstButtonReturn { completion(input.stringValue) }
+            if res == .alertFirstButtonReturn { completion(input.stringValue) }
             else { completion(nil) }
         }
     }
