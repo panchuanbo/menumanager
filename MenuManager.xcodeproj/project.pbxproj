@@ -8,12 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		CA187A481F24633F000B9C13 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA187A471F24633F000B9C13 /* AppDelegate.swift */; };
-		CA187A4A1F24633F000B9C13 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA187A491F24633F000B9C13 /* ViewController.swift */; };
+		CA187A4A1F24633F000B9C13 /* MMSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA187A491F24633F000B9C13 /* MMSettingsViewController.swift */; };
 		CA187A4C1F24633F000B9C13 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CA187A4B1F24633F000B9C13 /* Assets.xcassets */; };
 		CA187A4F1F24633F000B9C13 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA187A4D1F24633F000B9C13 /* Main.storyboard */; };
 		CA187A5A1F24633F000B9C13 /* MenuManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA187A591F24633F000B9C13 /* MenuManagerTests.swift */; };
 		CA187A651F24633F000B9C13 /* MenuManagerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA187A641F24633F000B9C13 /* MenuManagerUITests.swift */; };
 		CA187A731F251351000B9C13 /* BashTaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA187A721F251351000B9C13 /* BashTaskManager.swift */; };
+		CA520A741F70D98700A1CD11 /* MMSettingsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA520A731F70D98700A1CD11 /* MMSettingsDetailView.swift */; };
 		CA804DC41F67B20000A2079D /* BashTaskSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA804DC31F67B20000A2079D /* BashTaskSettings.swift */; };
 		CA804DC61F67B25B00A2079D /* SharedUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA804DC51F67B25B00A2079D /* SharedUtilities.swift */; };
 /* End PBXBuildFile section */
@@ -38,7 +39,7 @@
 /* Begin PBXFileReference section */
 		CA187A441F24633F000B9C13 /* MenuManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MenuManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA187A471F24633F000B9C13 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		CA187A491F24633F000B9C13 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		CA187A491F24633F000B9C13 /* MMSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMSettingsViewController.swift; sourceTree = "<group>"; };
 		CA187A4B1F24633F000B9C13 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CA187A4E1F24633F000B9C13 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CA187A501F24633F000B9C13 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -49,6 +50,7 @@
 		CA187A641F24633F000B9C13 /* MenuManagerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuManagerUITests.swift; sourceTree = "<group>"; };
 		CA187A661F24633F000B9C13 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CA187A721F251351000B9C13 /* BashTaskManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BashTaskManager.swift; sourceTree = "<group>"; };
+		CA520A731F70D98700A1CD11 /* MMSettingsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMSettingsDetailView.swift; sourceTree = "<group>"; };
 		CA804DC31F67B20000A2079D /* BashTaskSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BashTaskSettings.swift; sourceTree = "<group>"; };
 		CA804DC51F67B25B00A2079D /* SharedUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedUtilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -102,10 +104,10 @@
 			isa = PBXGroup;
 			children = (
 				CA187A471F24633F000B9C13 /* AppDelegate.swift */,
+				CA804DC51F67B25B00A2079D /* SharedUtilities.swift */,
 				CA187A721F251351000B9C13 /* BashTaskManager.swift */,
 				CA804DC31F67B20000A2079D /* BashTaskSettings.swift */,
-				CA804DC51F67B25B00A2079D /* SharedUtilities.swift */,
-				CA187A491F24633F000B9C13 /* ViewController.swift */,
+				CA520A721F70D93F00A1CD11 /* Settings */,
 				CA187A4B1F24633F000B9C13 /* Assets.xcassets */,
 				CA187A4D1F24633F000B9C13 /* Main.storyboard */,
 				CA187A501F24633F000B9C13 /* Info.plist */,
@@ -129,6 +131,15 @@
 				CA187A661F24633F000B9C13 /* Info.plist */,
 			);
 			path = MenuManagerUITests;
+			sourceTree = "<group>";
+		};
+		CA520A721F70D93F00A1CD11 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				CA187A491F24633F000B9C13 /* MMSettingsViewController.swift */,
+				CA520A731F70D98700A1CD11 /* MMSettingsDetailView.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -270,8 +281,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA520A741F70D98700A1CD11 /* MMSettingsDetailView.swift in Sources */,
 				CA187A731F251351000B9C13 /* BashTaskManager.swift in Sources */,
-				CA187A4A1F24633F000B9C13 /* ViewController.swift in Sources */,
+				CA187A4A1F24633F000B9C13 /* MMSettingsViewController.swift in Sources */,
 				CA187A481F24633F000B9C13 /* AppDelegate.swift in Sources */,
 				CA804DC41F67B20000A2079D /* BashTaskSettings.swift in Sources */,
 				CA804DC61F67B25B00A2079D /* SharedUtilities.swift in Sources */,

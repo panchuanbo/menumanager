@@ -21,4 +21,10 @@ struct BashTaskSettings {
         self.params = params
         self.useBashC = useBashC
     }
+    
+    func concatParams(_ separator: String = " ") -> String? {
+        guard let p = self.params, p.count > 0 else { return nil }
+        
+        return p.joined(separator: " ")
+    }
 }
